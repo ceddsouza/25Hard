@@ -1,0 +1,45 @@
+CREATE TABLE IF NOT EXISTS users (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  password_hash VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS daily_logs (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER NOT NULL REFERENCES users(id),
+  log_date DATE NOT NULL,
+  workout_1 BOOLEAN DEFAULT FALSE,
+  workout_2 BOOLEAN DEFAULT FALSE,
+  reading_pages INTEGER DEFAULT 0,
+  no_alcohol BOOLEAN DEFAULT FALSE,
+  clean_eating BOOLEAN DEFAULT FALSE,
+  photo_url VARCHAR(512),
+  completed BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE(user_id, log_date)
+);
+
+CREATE TABLE IF NOT EXISTS streaks (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER UNIQUE NOT NULL REFERENCES users(id),
+  current_streak INTEGER DEFAULT 0,
+  last_check_in DATE,
+  missed_day_count INTEGER DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS missed_day_alerts (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER NOT NULL REFERENCES users(id),
+  alert_date DATE NOT NULL,
+  sent BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE(user_id, alert_date)
+);
+
+CREATE INDEX IF NOT EXISTS idx_daily_logs_user_date ON daily_logs(user_id, log_date);
+CREATE INDEX IF NOT EXISTS idx_streaks_user ON streaks(user_id);

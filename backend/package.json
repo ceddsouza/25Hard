@@ -1,0 +1,23 @@
+{
+  "name": "25hard-backend",
+  "version": "1.0.0",
+  "description": "25Hard challenge app backend",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "pg": "^8.11.2",
+    "@sendgrid/mail": "^7.7.0",
+    "jsonwebtoken": "^9.0.0",
+    "bcryptjs": "^2.4.3",
+    "node-cron": "^3.0.2",
+    "multer": "^1.4.5-lts.1",
+    "firebase-admin": "^11.0.0"
+  }
+}
