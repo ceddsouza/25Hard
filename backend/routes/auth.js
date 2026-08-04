@@ -19,7 +19,8 @@ router.post('/login', async (req, res) => {
     return res.status(401).json({ error: 'Invalid credentials' });
   }
 
-  if (password !== process.env.CHALLENGE_PASSWORD) {
+  const correctPassword = process.env.CHALLENGE_PASSWORD || '25Hard';
+  if (password !== correctPassword) {
     return res.status(401).json({ error: 'Invalid credentials' });
   }
 
