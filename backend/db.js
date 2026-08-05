@@ -13,7 +13,7 @@ const pool = new Pool({
 });
 
 pool.on('error', (err) => {
-  console.error('Unexpected error on idle client', err);
+  console.warn('Database connection warning:', err.message);
 });
 
 export default pool;

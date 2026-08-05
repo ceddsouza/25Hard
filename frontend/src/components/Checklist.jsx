@@ -126,7 +126,7 @@ export default function Checklist({ user, token, onSubmit }) {
   return (
     <div className="checklist-container">
       <form onSubmit={handleSubmit} className="checklist-form">
-        <h2>Today's Challenges</h2>
+        <h2>📋 Today's Challenges</h2>
 
         <div className="checklist-item">
           <label className="checkbox-label">
