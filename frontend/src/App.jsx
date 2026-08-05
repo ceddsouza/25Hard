@@ -9,8 +9,14 @@ export default function App() {
 
   useEffect(() => {
     if (token) {
-      const decoded = JSON.parse(atob(token.split('.')[1]));
-      setUser(decoded);
+      try {
+        const decoded = JSON.parse(atob(token.split('.')[1]));
+        setUser(decoded);
+      } catch (err) {
+        console.error('Failed to decode token:', err);
+        localStorage.removeItem('token');
+        setToken(null);
+      }
     }
   }, [token]);
 

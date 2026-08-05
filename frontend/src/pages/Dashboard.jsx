@@ -8,10 +8,14 @@ export default function Dashboard({ user, token, onLogout }) {
   const [activeTab, setActiveTab] = useState('checklist');
   const [streak, setStreak] = useState(null);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchStreak();
-  }, [token, refreshTrigger]);
+    if (user) {
+      setLoading(false);
+      fetchStreak();
+    }
+  }, [token, refreshTrigger, user]);
 
   const fetchStreak = async () => {
     try {
@@ -28,6 +32,8 @@ export default function Dashboard({ user, token, onLogout }) {
   const handleChecklistSubmit = () => {
     setRefreshTrigger(prev => prev + 1);
   };
+
+  if (loading || !user) return <div style={{ padding: '20px' }}>Loading...</div>;
 
   return (
     <div className="dashboard">
