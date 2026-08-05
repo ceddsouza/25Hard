@@ -59,7 +59,7 @@ export default function Checklist({ user, token, onSubmit }) {
   };
 
   const handlePagesChange = (e) => {
-    const value = Math.min(parseInt(e.target.value) || 0, 999);
+    const value = Math.min(parseInt(e.target.value, 10) || 0, 999);
     setChecklist(prev => ({
       ...prev,
       reading_pages: value,
