@@ -33,6 +33,8 @@ export default function Checklist({ user, token, onSubmit }) {
     }
   };
 
+  const photoInputRef = React.useRef(null);
+
   const handlePhotoChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -43,6 +45,10 @@ export default function Checklist({ user, token, onSubmit }) {
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  const handlePhotoClick = () => {
+    photoInputRef.current?.click();
   };
 
   const handleCheckboxChange = (field) => {
@@ -192,8 +198,9 @@ export default function Checklist({ user, token, onSubmit }) {
 
         <div className="checklist-item photo-upload">
           <label className="label-text">📸 Upload Photo Proof</label>
-          <div className="photo-input-wrapper">
+          <div className="photo-input-wrapper" onClick={handlePhotoClick}>
             <input
+              ref={photoInputRef}
               type="file"
               accept="image/*"
               onChange={handlePhotoChange}
