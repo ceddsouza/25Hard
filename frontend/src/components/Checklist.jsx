@@ -157,9 +157,10 @@ export default function Checklist({ user, token, onSubmit }) {
         <div className="checklist-item">
           <label className="label-text">📖 Pages Read: {checklist.reading_pages}/10</label>
           <input
-            type="text"
-            inputMode="numeric"
-            value={checklist.reading_pages.toString()}
+            type="number"
+            min="0"
+            max="999"
+            value={checklist.reading_pages || ''}
             onChange={handlePagesChange}
             disabled={submitted}
             className="pages-input"
