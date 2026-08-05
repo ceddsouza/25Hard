@@ -44,7 +44,11 @@ export class MockPool {
     if (sql.includes('SELECT * FROM streaks WHERE user_id')) {
       const [userId] = params;
       const streak = mockData.streaks[userId];
-      return { rows: streak ? [streak] : [] };
+      if (!streak) {
+        // Create default streak if doesn't exist
+        mockData.streaks[userId] = { user_id: userId, current_streak: 0, last_check_in: null, missed_day_count: 0 };
+      }
+      return { rows: [mockData.streaks[userId]] };
     }
 
     if (sql.includes('UPDATE streaks SET current_streak')) {

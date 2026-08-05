@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import '../styles/Checklist.css';
 
 export default function Checklist({ user, token, onSubmit }) {
@@ -33,7 +33,7 @@ export default function Checklist({ user, token, onSubmit }) {
     }
   };
 
-  const photoInputRef = React.useRef(null);
+  const photoInputRef = useRef(null);
 
   const handlePhotoChange = (e) => {
     const file = e.target.files[0];
