@@ -11,24 +11,21 @@ const USERS = [
 
 router.get('/', async (req, res) => {
   try {
-    // Return hardcoded leaderboard with all users and their streak data
-    const leaderboard = USERS.map(user => {
-      const streakData = pool.query ?
-        (async () => {
-          const result = await pool.query('SELECT * FROM streaks WHERE user_id = $1', [user.id]);
-          return result.rows[0] || { current_streak: 0, last_check_in: null };
-        })() :
-        Promise.resolve({ current_streak: 0, last_check_in: null });
+    const leaderboard = await Promise.all(
+      USERS.map(async user => {
+        const streakResult = await pool.query('SELECT * FROM streaks WHERE user_id = $1', [user.id]);
+        const streak = streakResult.rows[0] || { current_streak: 0, last_check_in: null };
 
-      return {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        current_streak: 0,
-        days_completed: 0,
-        last_check_in: null,
-      };
-    });
+        return {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          current_streak: streak.current_streak || 0,
+          last_check_in: streak.last_check_in,
+          days_completed: 0,
+        };
+      })
+    );
 
     res.json(leaderboard);
   } catch (err) {

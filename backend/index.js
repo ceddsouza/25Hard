@@ -8,6 +8,7 @@ import leaderboardRoutes from './routes/leaderboard.js';
 import { initializeEmailScheduler } from './services/emailScheduler.js';
 
 dotenv.config();
+dotenv.config({ path: '.env.local', override: true });
 
 const app = express();
 const PORT = process.env.PORT || 5000;

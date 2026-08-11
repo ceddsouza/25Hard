@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import mockPool from './db-mock.js';
 
 dotenv.config();
+dotenv.config({ path: '.env.local', override: true });
 
 let pool;
 

@@ -34,8 +34,8 @@ router.post('/submit', authenticateToken, async (req, res) => {
 
     res.json(result.rows[0]);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Failed to submit checklist' });
+    console.error('Checklist submission error:', err.message, err.stack);
+    res.status(500).json({ error: 'Failed to submit checklist', details: err.message });
   }
 });
 
