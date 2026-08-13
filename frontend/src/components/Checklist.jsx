@@ -7,7 +7,9 @@ export default function Checklist({ user, token, onSubmit }) {
     workout_2: false,
     reading_pages: 0,
     no_alcohol: false,
+    no_sugar: false,
     clean_eating: false,
+    steps_10k: false,
     photo_url: null,
   });
   const [photo, setPhoto] = useState(null);
@@ -121,7 +123,8 @@ export default function Checklist({ user, token, onSubmit }) {
 
   const isComplete = checklist.workout_1 && checklist.workout_2 &&
                      checklist.reading_pages >= 10 &&
-                     checklist.no_alcohol && checklist.clean_eating && photoPreview;
+                     checklist.no_alcohol && checklist.no_sugar &&
+                     checklist.clean_eating && checklist.steps_10k && photoPreview;
 
   return (
     <div className="checklist-container">
@@ -150,7 +153,7 @@ export default function Checklist({ user, token, onSubmit }) {
               disabled={submitted}
             />
             <span className="icon">🏋️</span>
-            <span className="text">Workout 2</span>
+            <span className="text">Workout 2 (run, yoga, pilates or functional workout)</span>
           </label>
         </div>
 
@@ -187,12 +190,38 @@ export default function Checklist({ user, token, onSubmit }) {
           <label className="checkbox-label">
             <input
               type="checkbox"
+              checked={checklist.no_sugar}
+              onChange={() => handleCheckboxChange('no_sugar')}
+              disabled={submitted}
+            />
+            <span className="icon">🍬</span>
+            <span className="text">No Sugar</span>
+          </label>
+        </div>
+
+        <div className="checklist-item">
+          <label className="checkbox-label">
+            <input
+              type="checkbox"
               checked={checklist.clean_eating}
               onChange={() => handleCheckboxChange('clean_eating')}
               disabled={submitted}
             />
             <span className="icon">🥗</span>
             <span className="text">Clean Eating</span>
+          </label>
+        </div>
+
+        <div className="checklist-item">
+          <label className="checkbox-label">
+            <input
+              type="checkbox"
+              checked={checklist.steps_10k}
+              onChange={() => handleCheckboxChange('steps_10k')}
+              disabled={submitted}
+            />
+            <span className="icon">🚶</span>
+            <span className="text">10k Steps</span>
           </label>
         </div>
 

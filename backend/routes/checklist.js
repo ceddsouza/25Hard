@@ -7,7 +7,7 @@ import { updateStreak } from '../services/streakService.js';
 const router = express.Router();
 
 router.post('/submit', authenticateToken, async (req, res) => {
-  const { workout_1, workout_2, reading_pages, no_alcohol, clean_eating, photo } = req.body;
+  const { workout_1, workout_2, reading_pages, no_alcohol, no_sugar, clean_eating, steps_10k, photo } = req.body;
   const userId = req.user.id;
   const today = new Date().toISOString().split('T')[0];
 
@@ -17,15 +17,15 @@ router.post('/submit', authenticateToken, async (req, res) => {
       photoUrl = await uploadPhoto(photo, userId, today);
     }
 
-    const isCompleted = workout_1 && workout_2 && reading_pages >= 10 && no_alcohol && clean_eating && photo;
+    const isCompleted = workout_1 && workout_2 && reading_pages >= 10 && no_alcohol && no_sugar && clean_eating && steps_10k && photo;
 
     const result = await pool.query(
-      `INSERT INTO daily_logs (user_id, log_date, workout_1, workout_2, reading_pages, no_alcohol, clean_eating, photo_url, completed)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+      `INSERT INTO daily_logs (user_id, log_date, workout_1, workout_2, reading_pages, no_alcohol, no_sugar, clean_eating, steps_10k, photo_url, completed)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
        ON CONFLICT (user_id, log_date) DO UPDATE SET
-       workout_1 = $3, workout_2 = $4, reading_pages = $5, no_alcohol = $6, clean_eating = $7, photo_url = $8, completed = $9, updated_at = CURRENT_TIMESTAMP
+       workout_1 = $3, workout_2 = $4, reading_pages = $5, no_alcohol = $6, no_sugar = $7, clean_eating = $8, steps_10k = $9, photo_url = $10, completed = $11, updated_at = CURRENT_TIMESTAMP
        RETURNING *`,
-      [userId, today, workout_1, workout_2, reading_pages, no_alcohol, clean_eating, photoUrl, isCompleted]
+      [userId, today, workout_1, workout_2, reading_pages, no_alcohol, no_sugar, clean_eating, steps_10k, photoUrl, isCompleted]
     );
 
     if (isCompleted) {
@@ -56,7 +56,9 @@ router.get('/today', authenticateToken, async (req, res) => {
         workout_2: false,
         reading_pages: 0,
         no_alcohol: false,
+        no_sugar: false,
         clean_eating: false,
+        steps_10k: false,
         photo_url: null,
         completed: false,
       });

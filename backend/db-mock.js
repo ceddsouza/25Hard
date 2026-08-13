@@ -17,7 +17,7 @@ export class MockPool {
   async query(sql, params) {
     // Handle login query
     if (sql.includes('INSERT INTO daily_logs') || sql.includes('ON CONFLICT')) {
-      const [userId, logDate, w1, w2, pages, noAlc, clean, photo, completed] = params;
+      const [userId, logDate, w1, w2, pages, noAlc, noSugar, clean, steps, photo, completed] = params;
       const key = `${userId}_${logDate}`;
       mockData.dailyLogs[key] = {
         id: Object.keys(mockData.dailyLogs).length + 1,
@@ -27,7 +27,9 @@ export class MockPool {
         workout_2: w2,
         reading_pages: pages,
         no_alcohol: noAlc,
+        no_sugar: noSugar,
         clean_eating: clean,
+        steps_10k: steps,
         photo_url: photo,
         completed: completed,
       };
