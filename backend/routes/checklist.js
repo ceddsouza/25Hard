@@ -12,6 +12,13 @@ router.post('/submit', authenticateToken, async (req, res) => {
   const userId = req.user.id;
   const today = new Date().toISOString().split('T')[0];
 
+  // Check if challenge has started (Sept 7, 2026)
+  const challengeStart = new Date('2026-09-07');
+  const currentDate = new Date(today);
+  if (currentDate < challengeStart) {
+    return res.status(400).json({ error: 'Challenge starts on September 7, 2026. Please check back then!' });
+  }
+
   try {
     let photoUrl = null;
     if (photo) {
