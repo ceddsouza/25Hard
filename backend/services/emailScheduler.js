@@ -74,6 +74,29 @@ const sendMissedDayAlert = async (user) => {
   }
 };
 
+export const sendSubmissionConfirmation = async (user, streak) => {
+  try {
+    const htmlContent = `
+      <h2>✅ 25Hard Checklist Submitted!</h2>
+      <p>Great job, ${user.name}!</p>
+      <p>Your daily checklist has been submitted successfully.</p>
+      <p><strong>Current Streak: ${streak} days 🔥</strong></p>
+      <p>Keep it up!</p>
+    `;
+
+    await sgMail.send({
+      to: user.email,
+      from: process.env.SENDGRID_FROM_EMAIL,
+      subject: '✅ 25Hard - Checklist Submitted!',
+      html: htmlContent,
+    });
+
+    console.log(`Confirmation email sent to ${user.email}`);
+  } catch (err) {
+    console.error(`Failed to send confirmation email to ${user.email}:`, err);
+  }
+};
+
 export const initializeEmailScheduler = () => {
   console.log('Email scheduler initialized');
 

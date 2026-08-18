@@ -3,6 +3,7 @@ import pool from '../db.js';
 import { authenticateToken } from '../middleware/auth.js';
 import { uploadPhoto } from '../services/photoUpload.js';
 import { updateStreak } from '../services/streakService.js';
+import { sendSubmissionConfirmation } from '../services/emailScheduler.js';
 
 const router = express.Router();
 
@@ -30,6 +31,19 @@ router.post('/submit', authenticateToken, async (req, res) => {
 
     if (isCompleted) {
       await updateStreak(userId, true);
+
+      // Send confirmation email
+      const streakResult = await pool.query('SELECT current_streak FROM streaks WHERE user_id = $1', [userId]);
+      const streak = streakResult.rows[0]?.current_streak || 1;
+      const USERS = [
+        { id: 1, name: "Cedric D'Souza", email: 'ced.dsouza@gmail.com' },
+        { id: 2, name: 'Nader Merhi', email: 'marcomerhi@gmail.com' },
+        { id: 3, name: 'Rahil Hoque', email: 'rahilhoque@gmail.com' },
+      ];
+      const user = USERS.find(u => u.id === userId);
+      if (user) {
+        await sendSubmissionConfirmation(user, streak);
+      }
     }
 
     res.json(result.rows[0]);
