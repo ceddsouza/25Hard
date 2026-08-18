@@ -26,6 +26,17 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok' });
 });
 
+app.get('/test-email', async (req, res) => {
+  try {
+    const { sendReminderEmail } = await import('./services/emailScheduler.js');
+    const user = { id: 1, name: "Cedric D'Souza", email: 'ced.dsouza@gmail.com' };
+    await sendReminderEmail(user, 'morning');
+    res.json({ success: true, message: 'Test email sent to ' + user.email });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
   initializeEmailScheduler();

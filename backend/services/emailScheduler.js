@@ -11,7 +11,29 @@ const USERS = [
   { id: 3, name: 'Rahil Hoque', email: 'rahilhoque@gmail.com' },
 ];
 
-const sendReminderEmail = async (user, reminderType) => {
+
+const sendMissedDayAlert = async (user) => {
+  try {
+    const msg = {
+      to: user.email,
+      from: process.env.SENDGRID_FROM_EMAIL,
+      subject: '❌ 25Hard - Streak Broken!',
+      html: `
+        <h2>Oh no, ${user.name}!</h2>
+        <p>You missed yesterday's challenge. Your streak has been reset to 0.</p>
+        <p>To continue the challenge, you can pay $10 to the pot and resume your journey.</p>
+        <p>Let's get back on track today! 💪</p>
+      `,
+    };
+
+    await sgMail.send(msg);
+    console.log(`Missed day alert sent to ${user.email}`);
+  } catch (err) {
+    console.error(`Failed to send missed day alert to ${user.email}:`, err);
+  }
+};
+
+export const sendReminderEmail = async (user, reminderType) => {
   try {
     const streakResult = await pool.query(
       'SELECT current_streak FROM streaks WHERE user_id = $1',
@@ -33,7 +55,9 @@ const sendReminderEmail = async (user, reminderType) => {
         <li>✅ 2 Workouts</li>
         <li>📖 10 Pages in a Book</li>
         <li>🚫 No Alcohol</li>
+        <li>🍬 No Sugar</li>
         <li>🥗 Clean Eating</li>
+        <li>🚶 10k Steps</li>
         <li>📸 Upload a Photo</li>
       </ul>
       <p><strong>Check in before midnight!</strong></p>
@@ -50,27 +74,6 @@ const sendReminderEmail = async (user, reminderType) => {
     console.log(`Email sent to ${user.email} (${reminderType})`);
   } catch (err) {
     console.error(`Failed to send email to ${user.email}:`, err);
-  }
-};
-
-const sendMissedDayAlert = async (user) => {
-  try {
-    const msg = {
-      to: user.email,
-      from: process.env.SENDGRID_FROM_EMAIL,
-      subject: '❌ 25Hard - Streak Broken!',
-      html: `
-        <h2>Oh no, ${user.name}!</h2>
-        <p>You missed yesterday's challenge. Your streak has been reset to 0.</p>
-        <p>To continue the challenge, you can pay $10 to the pot and resume your journey.</p>
-        <p>Let's get back on track today! 💪</p>
-      `,
-    };
-
-    await sgMail.send(msg);
-    console.log(`Missed day alert sent to ${user.email}`);
-  } catch (err) {
-    console.error(`Failed to send missed day alert to ${user.email}:`, err);
   }
 };
 
