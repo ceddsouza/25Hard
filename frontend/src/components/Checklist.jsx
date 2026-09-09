@@ -85,7 +85,7 @@ export default function Checklist({ user, token, onSubmit }) {
 
       const payload = {
         ...checklist,
-        photo: photoBase64,
+        photo: photoBase64 || checklist.photo_url,
       };
 
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/checklist/submit`, {
@@ -111,8 +111,8 @@ export default function Checklist({ user, token, onSubmit }) {
       setSubmitted(true);
       onSubmit();
 
-      // Reset submission status after 5 seconds
-      setTimeout(() => setSubmitted(false), 5000);
+      // Reset submission status after 3 seconds
+      setTimeout(() => setSubmitted(false), 3000);
     } catch (err) {
       setError('Connection error');
       console.error(err);
@@ -137,7 +137,6 @@ export default function Checklist({ user, token, onSubmit }) {
               type="checkbox"
               checked={checklist.workout_1}
               onChange={() => handleCheckboxChange('workout_1')}
-              disabled={submitted}
             />
             <span className="icon">💪</span>
             <span className="text">Workout 1</span>
@@ -150,7 +149,6 @@ export default function Checklist({ user, token, onSubmit }) {
               type="checkbox"
               checked={checklist.workout_2}
               onChange={() => handleCheckboxChange('workout_2')}
-              disabled={submitted}
             />
             <span className="icon">🏋️</span>
             <span className="text">Workout 2 (run, yoga, pilates or functional workout)</span>
@@ -165,7 +163,6 @@ export default function Checklist({ user, token, onSubmit }) {
             max="999"
             value={checklist.reading_pages || ''}
             onChange={handlePagesChange}
-            disabled={submitted}
             className="pages-input"
           />
           <div className="progress-bar">
@@ -179,7 +176,6 @@ export default function Checklist({ user, token, onSubmit }) {
               type="checkbox"
               checked={checklist.no_alcohol}
               onChange={() => handleCheckboxChange('no_alcohol')}
-              disabled={submitted}
             />
             <span className="icon">🚫</span>
             <span className="text">No Alcohol</span>
@@ -192,7 +188,6 @@ export default function Checklist({ user, token, onSubmit }) {
               type="checkbox"
               checked={checklist.no_sugar}
               onChange={() => handleCheckboxChange('no_sugar')}
-              disabled={submitted}
             />
             <span className="icon">🍬</span>
             <span className="text">No Sugar</span>
@@ -205,7 +200,6 @@ export default function Checklist({ user, token, onSubmit }) {
               type="checkbox"
               checked={checklist.clean_eating}
               onChange={() => handleCheckboxChange('clean_eating')}
-              disabled={submitted}
             />
             <span className="icon">🥗</span>
             <span className="text">Clean Eating</span>
@@ -218,7 +212,6 @@ export default function Checklist({ user, token, onSubmit }) {
               type="checkbox"
               checked={checklist.steps_10k}
               onChange={() => handleCheckboxChange('steps_10k')}
-              disabled={submitted}
             />
             <span className="icon">🚶</span>
             <span className="text">10k Steps</span>
@@ -233,7 +226,6 @@ export default function Checklist({ user, token, onSubmit }) {
               type="file"
               accept="image/*"
               onChange={handlePhotoChange}
-              disabled={submitted}
               className="photo-input"
             />
             <span className="upload-text">Click to upload or take photo</span>
@@ -253,10 +245,10 @@ export default function Checklist({ user, token, onSubmit }) {
 
         <button
           type="submit"
-          disabled={loading || !isComplete || submitted}
-          className={`submit-btn ${isComplete && !submitted ? 'enabled' : ''}`}
+          disabled={loading || !isComplete}
+          className={`submit-btn ${isComplete ? 'enabled' : ''}`}
         >
-          {submitted ? '✅ Submitted for Today' : loading ? 'Submitting...' : `Submit Checklist (${isComplete ? '✅' : '❌'})`}
+          {loading ? 'Submitting...' : submitted ? `✅ Updated! ${isComplete ? 'Submit Again' : ''}` : `Submit Checklist (${isComplete ? '✅' : '❌'})`}
         </button>
 
         <p className="checklist-hint">Complete all items and upload a photo to submit</p>
