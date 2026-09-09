@@ -27,6 +27,9 @@ router.get('/', async (req, res) => {
       })
     );
 
+    // Sort by streak in descending order
+    leaderboard.sort((a, b) => b.current_streak - a.current_streak);
+
     res.json(leaderboard);
   } catch (err) {
     console.error(err);
