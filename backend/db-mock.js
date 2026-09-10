@@ -7,9 +7,9 @@ const mockData = {
   ],
   dailyLogs: {},
   streaks: {
-    1: { user_id: 1, current_streak: 3, last_check_in: null, missed_day_count: 0 },
-    2: { user_id: 2, current_streak: 2, last_check_in: null, missed_day_count: 0 },
-    3: { user_id: 3, current_streak: 3, last_check_in: null, missed_day_count: 0 },
+    1: { user_id: 1, current_streak: 3, last_check_in: '2026-09-09', missed_day_count: 0 },
+    2: { user_id: 2, current_streak: 2, last_check_in: '2026-09-09', missed_day_count: 0 },
+    3: { user_id: 3, current_streak: 3, last_check_in: '2026-09-09', missed_day_count: 0 },
   },
 };
 
@@ -54,11 +54,12 @@ export class MockPool {
     }
 
     if (sql.includes('UPDATE streaks SET current_streak')) {
-      const [newStreak, userId] = [params[0], params[1]];
+      const [newStreak, lastCheckIn, userId] = [params[0], params[1], params[2]];
       if (!mockData.streaks[userId]) {
         mockData.streaks[userId] = { user_id: userId, current_streak: 0, last_check_in: null, missed_day_count: 0 };
       }
       mockData.streaks[userId].current_streak = newStreak;
+      mockData.streaks[userId].last_check_in = lastCheckIn;
       return { rows: [mockData.streaks[userId]] };
     }
 
