@@ -7,9 +7,9 @@ const mockData = {
   ],
   dailyLogs: {},
   streaks: {
-    1: { user_id: 1, current_streak: 3, last_check_in: '2026-09-09', missed_day_count: 0 },
-    2: { user_id: 2, current_streak: 2, last_check_in: '2026-09-09', missed_day_count: 0 },
-    3: { user_id: 3, current_streak: 3, last_check_in: '2026-09-09', missed_day_count: 0 },
+    1: { user_id: 1, current_streak: 5, last_check_in: '2026-09-11', missed_day_count: 0 },
+    2: { user_id: 2, current_streak: 4, last_check_in: '2026-09-11', missed_day_count: 0 },
+    3: { user_id: 3, current_streak: 5, last_check_in: '2026-09-11', missed_day_count: 0 },
   },
 };
 
