@@ -22,16 +22,23 @@ export const updateStreak = async (userId, completed) => {
     }
 
     if (completed) {
-      const lastCheckInStr = streak.last_check_in;
+      const lastCheckInStr = streak.last_check_in ? streak.last_check_in.toString().split('T')[0] : null;
       let newStreak = streak.current_streak + 1;
 
       if (lastCheckInStr && lastCheckInStr !== today) {
-        const lastDate = new Date(lastCheckInStr);
-        const todayDate = new Date(today);
-        const dayDiff = Math.floor((todayDate - lastDate) / (1000 * 60 * 60 * 24));
+        // Calculate day difference by parsing date strings directly
+        const [lastYear, lastMonth, lastDay] = lastCheckInStr.split('-').map(Number);
+        const [todayYear, todayMonth, todayDay] = today.split('-').map(Number);
+
+        const lastDate = new Date(lastYear, lastMonth - 1, lastDay);
+        const todayDate = new Date(todayYear, todayMonth - 1, todayDay);
+        const dayDiff = Math.round((todayDate - lastDate) / (1000 * 60 * 60 * 24));
+
+        console.log(`Streak check: userId=${userId}, last=${lastCheckInStr}, today=${today}, dayDiff=${dayDiff}`);
 
         // Reset streak only if more than 1 day has passed (missed at least one day)
         if (dayDiff > 1) {
+          console.log(`Resetting streak (dayDiff=${dayDiff} > 1)`);
           newStreak = 1; // Reset if missed more than 1 day
         }
       }
