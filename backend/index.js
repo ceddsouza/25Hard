@@ -13,21 +13,22 @@ dotenv.config({ path: '.env.local', override: true });
 
 const initializeStreaks = async () => {
   try {
-    // Set correct streaks: Cedric 6, Nader 5, Rahil 5 with last_check_in Sept 12 (yesterday)
-    // They submitted on Sept 12, so streaks incremented to these values
+    // Set streaks with today's date to enable proper increment logic
+    // Cedric submitted today (Sept 14) so streak is 8 with last_check_in today
+    // Nader and Rahil will increment from their current values when they submit today
     const updates = [
-      { userId: 1, streak: 6 },
-      { userId: 2, streak: 5 },
-      { userId: 3, streak: 5 },
+      { userId: 1, streak: 8, date: '2026-09-14' }, // Cedric - just submitted
+      { userId: 2, streak: 5, date: '2026-09-14' }, // Nader - set for today so increments to 6 when submits
+      { userId: 3, streak: 5, date: '2026-09-14' }, // Rahil - set for today so increments to 6 when submits
     ];
 
     for (const update of updates) {
       await pool.query(
         'UPDATE streaks SET current_streak = $1, last_check_in = $2 WHERE user_id = $3',
-        [update.streak, '2026-09-12', update.userId]
+        [update.streak, update.date, update.userId]
       );
     }
-    console.log('✅ Streaks initialized: Cedric 6, Nader 5, Rahil 5');
+    console.log('✅ Streaks initialized: Cedric 8, Nader 5→6, Rahil 5→6');
   } catch (err) {
     console.error('Streak initialization warning:', err.message);
   }
