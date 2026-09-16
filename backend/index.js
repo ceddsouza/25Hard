@@ -13,13 +13,15 @@ dotenv.config({ path: '.env.local', override: true });
 
 const initializeStreaks = async () => {
   try {
-    // Set streaks with today's date to enable proper increment logic
-    // Cedric submitted today (Sept 14) so streak is 8 with last_check_in today
-    // Nader and Rahil will increment from their current values when they submit today
+    // Set streaks with today's date (Sept 15) to enable proper increment logic
+    // Cedric: 9 (just submitted today, so it incremented from 8)
+    // Nader & Rahil: 5 with today's date so they increment to 6 when they submit
+    const today = new Date().toISOString().split('T')[0];
+
     const updates = [
-      { userId: 1, streak: 8, date: '2026-09-14' }, // Cedric - just submitted
-      { userId: 2, streak: 5, date: '2026-09-14' }, // Nader - set for today so increments to 6 when submits
-      { userId: 3, streak: 5, date: '2026-09-14' }, // Rahil - set for today so increments to 6 when submits
+      { userId: 1, streak: 9, date: today }, // Cedric - just submitted
+      { userId: 2, streak: 5, date: today }, // Nader - will be 6 when they submit
+      { userId: 3, streak: 5, date: today }, // Rahil - will be 6 when they submit
     ];
 
     for (const update of updates) {
@@ -28,7 +30,7 @@ const initializeStreaks = async () => {
         [update.streak, update.date, update.userId]
       );
     }
-    console.log('✅ Streaks initialized: Cedric 8, Nader 5→6, Rahil 5→6');
+    console.log(`✅ Streaks initialized: Cedric 9, Nader 5→6, Rahil 5→6 (today: ${today})`);
   } catch (err) {
     console.error('Streak initialization warning:', err.message);
   }

@@ -26,20 +26,30 @@ export const updateStreak = async (userId, completed) => {
       let newStreak = streak.current_streak + 1;
 
       if (lastCheckInStr && lastCheckInStr !== today) {
-        // Calculate day difference by parsing date strings directly
-        const [lastYear, lastMonth, lastDay] = lastCheckInStr.split('-').map(Number);
-        const [todayYear, todayMonth, todayDay] = today.split('-').map(Number);
+        // Simple day difference calculation: count days between dates as YYYY-MM-DD strings
+        const lastParts = lastCheckInStr.split('-').map(Number);
+        const todayParts = today.split('-').map(Number);
 
-        const lastDate = new Date(lastYear, lastMonth - 1, lastDay);
-        const todayDate = new Date(todayYear, todayMonth - 1, todayDay);
-        const dayDiff = Math.round((todayDate - lastDate) / (1000 * 60 * 60 * 24));
+        // Convert to day count since epoch for reliable comparison
+        const daysToMs = (y, m, d) => {
+          const date = new Date(y, m - 1, d);
+          return Math.floor(date.getTime() / (1000 * 60 * 60 * 24));
+        };
 
-        console.log(`Streak check: userId=${userId}, last=${lastCheckInStr}, today=${today}, dayDiff=${dayDiff}`);
+        const lastDays = daysToMs(lastParts[0], lastParts[1], lastParts[2]);
+        const todayDays = daysToMs(todayParts[0], todayParts[1], todayParts[2]);
+        const dayDiff = todayDays - lastDays;
+
+        console.log(`Streak check: userId=${userId}, last=${lastCheckInStr}, today=${today}, dayDiff=${dayDiff}, currentStreak=${streak.current_streak}`);
 
         // Reset streak only if more than 1 day has passed (missed at least one day)
         if (dayDiff > 1) {
           console.log(`Resetting streak (dayDiff=${dayDiff} > 1)`);
-          newStreak = 1; // Reset if missed more than 1 day
+          newStreak = 1;
+        } else if (dayDiff === 0) {
+          // Same day submission - don't increment again
+          console.log(`Same day submission, keeping streak at ${streak.current_streak}`);
+          newStreak = streak.current_streak;
         }
       }
 
