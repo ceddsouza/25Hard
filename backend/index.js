@@ -19,9 +19,9 @@ const initializeStreaks = async () => {
     const today = new Date().toISOString().split('T')[0];
 
     const updates = [
-      { userId: 1, streak: 9, date: today }, // Cedric - just submitted
-      { userId: 2, streak: 5, date: today }, // Nader - will be 6 when they submit
-      { userId: 3, streak: 5, date: today }, // Rahil - will be 6 when they submit
+      { userId: 1, streak: 9, date: today }, // Cedric - 9
+      { userId: 2, streak: 5, date: today }, // Nader - 5, will be 6 when submits
+      { userId: 3, streak: 6, date: today }, // Rahil - 6, will be 7 when submits
     ];
 
     for (const update of updates) {
@@ -30,7 +30,7 @@ const initializeStreaks = async () => {
         [update.streak, update.date, update.userId]
       );
     }
-    console.log(`✅ Streaks initialized: Cedric 9, Nader 5→6, Rahil 5→6 (today: ${today})`);
+    console.log(`✅ Streaks: Cedric 9, Nader 5→6, Rahil 6→7 (today: ${today})`);
   } catch (err) {
     console.error('Streak initialization warning:', err.message);
   }
