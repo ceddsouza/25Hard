@@ -21,7 +21,7 @@ const initializeStreaks = async () => {
     const updates = [
       { userId: 1, streak: 11, date: today }, // Cedric - 11
       { userId: 2, streak: 7, date: today }, // Nader - 7
-      { userId: 3, streak: 8, date: today }, // Rahil - 8 (was 6, should be 8)
+      { userId: 3, streak: 6, date: today }, // Rahil - 6
     ];
 
     for (const update of updates) {
