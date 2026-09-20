@@ -19,9 +19,9 @@ const initializeStreaks = async () => {
     const today = new Date().toISOString().split('T')[0];
 
     const updates = [
-      { userId: 1, streak: 13, date: today }, // Cedric - 13 (11 + 2 days)
-      { userId: 2, streak: 7, date: today }, // Nader - 7 (keep current)
-      { userId: 3, streak: 6, date: today }, // Rahil - 6 (keep current)
+      { userId: 1, streak: 13, date: today }, // Cedric - 13
+      { userId: 2, streak: 8, date: today }, // Nader - 8
+      { userId: 3, streak: 6, date: today }, // Rahil - 6
     ];
 
     for (const update of updates) {
