@@ -26,19 +26,18 @@ export const updateStreak = async (userId, completed) => {
       let newStreak = streak.current_streak + 1;
 
       if (lastCheckInStr && lastCheckInStr !== today) {
-        // Simple day difference calculation: count days between dates as YYYY-MM-DD strings
-        const lastParts = lastCheckInStr.split('-').map(Number);
-        const todayParts = today.split('-').map(Number);
+        // Calculate day difference using date string math (timezone-safe)
+        const [lastY, lastM, lastD] = lastCheckInStr.split('-');
+        const [todayY, todayM, todayD] = today.split('-');
 
-        // Convert to day count since epoch for reliable comparison
-        const daysToMs = (y, m, d) => {
-          const date = new Date(y, m - 1, d);
-          return Math.floor(date.getTime() / (1000 * 60 * 60 * 24));
-        };
+        // Convert dates to day-of-year to avoid timezone issues
+        const daysInMonths = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
+        const lastDayOfYear = parseInt(lastD) + daysInMonths[parseInt(lastM) - 1];
+        const todayDayOfYear = parseInt(todayD) + daysInMonths[parseInt(todayM) - 1];
 
-        const lastDays = daysToMs(lastParts[0], lastParts[1], lastParts[2]);
-        const todayDays = daysToMs(todayParts[0], todayParts[1], todayParts[2]);
-        const dayDiff = todayDays - lastDays;
+        // Calculate year difference in days
+        const yearDiff = (parseInt(todayY) - parseInt(lastY)) * 365;
+        const dayDiff = yearDiff + (todayDayOfYear - lastDayOfYear);
 
         console.log(`Streak check: userId=${userId}, last=${lastCheckInStr}, today=${today}, dayDiff=${dayDiff}, currentStreak=${streak.current_streak}`);
 
