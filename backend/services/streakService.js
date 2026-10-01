@@ -41,9 +41,9 @@ export const updateStreak = async (userId, completed) => {
 
         console.log(`Streak check: userId=${userId}, last=${lastCheckInStr}, today=${today}, dayDiff=${dayDiff}, currentStreak=${streak.current_streak}`);
 
-        // Reset streak only if more than 1 day has passed (missed at least one day)
-        if (dayDiff > 1) {
-          console.log(`Resetting streak (dayDiff=${dayDiff} > 1)`);
+        // Only reset if more than 4 days have passed (give users grace period for late submissions)
+        if (dayDiff > 4) {
+          console.log(`Resetting streak (dayDiff=${dayDiff} > 4, missed more than 4 days)`);
           newStreak = 1;
         } else if (dayDiff === 0) {
           // Same day submission - don't increment again

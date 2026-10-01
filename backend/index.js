@@ -21,7 +21,7 @@ const initializeStreaks = async () => {
 
     const updates = [
       { userId: 1, streak: 22, date: today }, // Cedric - 22
-      { userId: 2, streak: 14, date: yesterday }, // Nader - 14
+      { userId: 2, streak: 15, date: today }, // Nader - 15
       { userId: 3, streak: 8, date: yesterday }, // Rahil - 8
     ];
 
@@ -31,7 +31,7 @@ const initializeStreaks = async () => {
         [update.streak, update.date, update.userId]
       );
     }
-    console.log(`✅ Streaks: Cedric 22, Nader 14, Rahil 8 (today: ${today})`);
+    console.log(`✅ Streaks: Cedric 22, Nader 15, Rahil 8 (today: ${today})`);
   } catch (err) {
     console.error('Streak initialization warning:', err.message);
   }
